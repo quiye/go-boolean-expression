@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"math/rand"
+	"testing"
+)
 
 func TestExpr_eval(t *testing.T) {
 	type fields struct {
@@ -123,5 +126,64 @@ func TestExpr_eval(t *testing.T) {
 				t.Errorf("Expr.Eval() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+// function for random generation of test data
+// use random for generating random data and random operators
+func generateRandomExpr(depth int) Expr {
+	if depth == 0 {
+		return NewLeafExpr(rand.Intn(10))
+	}
+	switch rand.Intn(3) {
+	case 0:
+		return NewAndExpr([]Expr{generateRandomExpr(depth - 1), generateRandomExpr(depth - 1)})
+	case 1:
+		return NewOrExpr([]Expr{generateRandomExpr(depth - 1), generateRandomExpr(depth - 1)})
+	case 2:
+		return NewNotExpr(generateRandomExpr(depth - 1))
+	default:
+		return NewLeafExpr(rand.Intn(10))
+	}
+}
+
+func TestExpr_evalRandom(t *testing.T) {
+	for range 10 {
+		e := generateRandomExpr(3)
+		input := []int{rand.Intn(10), rand.Intn(10), rand.Intn(10)}
+		result := e.Eval(input)
+		// show the generated expression and input and the result
+		t.Logf("\ninput: %v\nresult: %v\nexpr: ", input, result)
+		printExpr(e)
+		println()
+		println()
+	}
+}
+
+func printExpr(e Expr) {
+	switch e.op {
+	case And:
+		print("(")
+		for i, child := range e.childs {
+			printExpr(child)
+			if i < len(e.childs)-1 {
+				print(" AND ")
+			}
+		}
+		print(")")
+	case Or:
+		print("(")
+		for i, child := range e.childs {
+			printExpr(child)
+			if i < len(e.childs)-1 {
+				print(" OR ")
+			}
+		}
+		print(")")
+	case Not:
+		print("NOT ")
+		printExpr(e.childs[0])
+	case Leaf:
+		print(e.leafValue)
 	}
 }
