@@ -18,24 +18,24 @@ const (
 
 type Expr struct {
 	op        Operator
-	childs    []Expr
+	childs    []*Expr
 	leafValue int
 }
 
-func NewAndExpr(childs []Expr) Expr {
-	return Expr{op: And, childs: childs}
+func NewAndExpr(childs []*Expr) *Expr {
+	return &Expr{op: And, childs: childs}
 }
 
-func NewOrExpr(childs []Expr) Expr {
-	return Expr{op: Or, childs: childs}
+func NewOrExpr(childs []*Expr) *Expr {
+	return &Expr{op: Or, childs: childs}
 }
 
-func NewNotExpr(child Expr) Expr {
-	return Expr{op: Not, childs: []Expr{child}}
+func NewNotExpr(child *Expr) *Expr {
+	return &Expr{op: Not, childs: []*Expr{child}}
 }
 
-func NewLeafExpr(value int) Expr {
-	return Expr{op: Leaf, leafValue: value}
+func NewLeafExpr(value int) *Expr {
+	return &Expr{op: Leaf, leafValue: value}
 }
 
 func (e *Expr) Eval(input []int) bool {

@@ -8,7 +8,7 @@ import (
 func TestExpr_eval(t *testing.T) {
 	type fields struct {
 		op        Operator
-		childs    []Expr
+		childs    []*Expr
 		leafValue int
 	}
 	type args struct {
@@ -24,7 +24,7 @@ func TestExpr_eval(t *testing.T) {
 			name: "And",
 			fields: fields{
 				op: And,
-				childs: []Expr{
+				childs: []*Expr{
 					{
 						op:        Leaf,
 						childs:    nil,
@@ -47,7 +47,7 @@ func TestExpr_eval(t *testing.T) {
 			name: "Or",
 			fields: fields{
 				op: Or,
-				childs: []Expr{
+				childs: []*Expr{
 					{
 						op:        Leaf,
 						childs:    nil,
@@ -70,7 +70,7 @@ func TestExpr_eval(t *testing.T) {
 			name: "Not",
 			fields: fields{
 				op: Not,
-				childs: []Expr{
+				childs: []*Expr{
 					{
 						op:        Leaf,
 						childs:    nil,
@@ -88,7 +88,7 @@ func TestExpr_eval(t *testing.T) {
 			name: "Not (success)",
 			fields: fields{
 				op: Not,
-				childs: []Expr{
+				childs: []*Expr{
 					{
 						op:        Leaf,
 						childs:    nil,
@@ -131,15 +131,15 @@ func TestExpr_eval(t *testing.T) {
 
 // function for random generation of test data
 // use random for generating random data and random operators
-func generateRandomExpr(depth int) Expr {
+func generateRandomExpr(depth int) *Expr {
 	if depth == 0 {
 		return NewLeafExpr(rand.Intn(10))
 	}
-	switch rand.Intn(3) {
+	switch rand.Intn(4) {
 	case 0:
-		return NewAndExpr([]Expr{generateRandomExpr(depth - 1), generateRandomExpr(depth - 1)})
+		return NewAndExpr([]*Expr{generateRandomExpr(depth - 1), generateRandomExpr(depth - 1)})
 	case 1:
-		return NewOrExpr([]Expr{generateRandomExpr(depth - 1), generateRandomExpr(depth - 1)})
+		return NewOrExpr([]*Expr{generateRandomExpr(depth - 1), generateRandomExpr(depth - 1)})
 	case 2:
 		return NewNotExpr(generateRandomExpr(depth - 1))
 	default:
@@ -160,7 +160,7 @@ func TestExpr_evalRandom(t *testing.T) {
 	}
 }
 
-func printExpr(e Expr) {
+func printExpr(e *Expr) {
 	switch e.op {
 	case And:
 		print("(")
