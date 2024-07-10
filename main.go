@@ -62,7 +62,8 @@ func (e *Expr) Eval(input []int) bool {
 	case Not:
 		return !e.childs[0].Eval(input)
 	case Leaf:
-		return slices.Index(input, e.leafValue) != -1
+		isContain := slices.Index(input, e.leafValue) != -1
+		return isContain != e.isNegatedLeaf
 	}
 
 	// fixme: error handling
