@@ -276,7 +276,7 @@ func TestApplyDeMorgansLaw(t *testing.T) {
 }
 
 func TestExpr_evalRandom2(t *testing.T) {
-	for range 10 {
+	for range 30 {
 		e := generateRandomExpr(5)
 		input := []int{rand.Intn(10), rand.Intn(10), rand.Intn(10)}
 		result := e.Eval(input)
