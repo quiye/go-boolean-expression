@@ -289,3 +289,16 @@ func TestExpr_evalRandom2(t *testing.T) {
 		println()
 	}
 }
+
+func TestExpr_evalRandomWithDeMorgan(t *testing.T) {
+	for range 100 {
+		e := generateRandomExpr(15)
+		input := []int{rand.Intn(10), rand.Intn(10), rand.Intn(10)}
+		result := e.Eval(input)
+		ApplyDeMorgansLaw(e)
+		result2 := e.Eval(input)
+		if result != result2 {
+			t.Errorf("ApplyDeMorgansLaw() = %v, want %v", result2, result)
+		}
+	}
+}
