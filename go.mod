@@ -1,3 +1,3 @@
 module github.com/quiye/go-boolean-expression
 
-go 1.22.3
+go 1.24
